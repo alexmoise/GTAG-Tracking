@@ -4,11 +4,9 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Best used for GTAG tracking or anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 0.2.2
+ * Version: 0.3.0
  * Author: Alex Moise
  * Author URI: https://moise.pro
- * WC requires at least: 4.9.0
- * WC tested up to: 7.8.0
  */
 
 // Add the settings page
@@ -46,9 +44,11 @@ function gtag_tracking_settings_page_css() {
     echo '
 	.form-table td * {
     display: block;
-    margin: 5px 0;
     width: 60%;
 	}
+	.input-label {
+    margin: 8px 0 5px 0;
+}
 	';
     echo '</style>';
 }
@@ -115,12 +115,13 @@ function gtag_tracking_field_global_site_tag_callback() {
     $location = get_option('gfwgtag_global_site_tag_location');
     $pages = get_option('gfwgtag_global_site_tag_pages');
     
-    echo '<textarea name="gfwgtag_global_site_tag" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    echo '<select name="gfwgtag_global_site_tag_location">';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_global_site_tag" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Position:</div><select name="gfwgtag_global_site_tag_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
     echo '</select>';
-    echo '<select multiple="multiple" name="gfwgtag_global_site_tag_pages[]">';
+    echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_global_site_tag_pages[]">';
+    echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
     $pages_list = get_pages();
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
@@ -133,13 +134,14 @@ function gtag_tracking_field_purchase_tracking_code_callback() {
     $location = get_option('gfwgtag_purchase_tracking_code_location');
     $pages = get_option('gfwgtag_purchase_tracking_code_pages');
     
-    echo '<textarea name="gfwgtag_purchase_tracking_code" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    echo '<select name="gfwgtag_purchase_tracking_code_location">';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_purchase_tracking_code" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Position:</div><select name="gfwgtag_purchase_tracking_code_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
     echo '</select>';
-    echo '<select multiple="multiple" name="gfwgtag_purchase_tracking_code_pages[]">';
-    $pages_list = get_pages();
+    echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_purchase_tracking_code_pages[]">';
+    echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
+	$pages_list = get_pages();
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
@@ -151,13 +153,14 @@ function gtag_tracking_field_calls_from_website_callback() {
     $location = get_option('gfwgtag_calls_from_website_location');
     $pages = get_option('gfwgtag_calls_from_website_pages');
     
-    echo '<textarea name="gfwgtag_calls_from_website" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    echo '<select name="gfwgtag_calls_from_website_location">';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_calls_from_website" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Position:</div><select name="gfwgtag_calls_from_website_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
     echo '</select>';
-    echo '<select multiple="multiple" name="gfwgtag_calls_from_website_pages[]">';
-    $pages_list = get_pages();
+    echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_calls_from_website_pages[]">';
+    echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
+	$pages_list = get_pages();
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
@@ -169,13 +172,14 @@ function gtag_tracking_field_thank_you_conversion_callback() {
     $location = get_option('gfwgtag_thank_you_conversion_location');
     $pages = get_option('gfwgtag_thank_you_conversion_pages');
     
-    echo '<textarea name="gfwgtag_thank_you_conversion" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    echo '<select name="gfwgtag_thank_you_conversion_location">';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_thank_you_conversion" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Position:</div><select name="gfwgtag_thank_you_conversion_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
     echo '</select>';
-    echo '<select multiple="multiple" name="gfwgtag_thank_you_conversion_pages[]">';
-    $pages_list = get_pages();
+    echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_thank_you_conversion_pages[]">';
+    echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
+	$pages_list = get_pages();
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
@@ -187,13 +191,14 @@ function gtag_tracking_field_google_tag_manager_callback() {
     $location = get_option('gfwgtag_google_tag_manager_location');
     $pages = get_option('gfwgtag_google_tag_manager_pages');
     
-    echo '<textarea name="gfwgtag_google_tag_manager" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    echo '<select name="gfwgtag_google_tag_manager_location">';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_google_tag_manager" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Position:</div><select name="gfwgtag_google_tag_manager_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
     echo '</select>';
-    echo '<select multiple="multiple" name="gfwgtag_google_tag_manager_pages[]">';
-    $pages_list = get_pages();
+    echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_google_tag_manager_pages[]">';
+    echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
+	$pages_list = get_pages();
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
@@ -205,13 +210,14 @@ function gtag_tracking_field_no_script_fallback_callback() {
     $location = get_option('gfwgtag_no_script_fallback_location');
     $pages = get_option('gfwgtag_no_script_fallback_pages');
     
-    echo '<textarea name="gfwgtag_no_script_fallback" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
-    echo '<select name="gfwgtag_no_script_fallback_location">';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_no_script_fallback" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Position:</div><select name="gfwgtag_no_script_fallback_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
     echo '</select>';
-    echo '<select multiple="multiple" name="gfwgtag_no_script_fallback_pages[]">';
-    $pages_list = get_pages();
+    echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_no_script_fallback_pages[]">';
+    echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
+	$pages_list = get_pages();
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
@@ -291,5 +297,25 @@ function gtag_tracking_init() {
     }
 }
 add_action('admin_init', 'gtag_tracking_init');
+
+// === Now the output
+
+// Conditionally output the scripts
+add_action('template_redirect', 'gtag_tracking_output', 0);
+function gtag_tracking_output() {
+    $global_site_tag = get_option('gfwgtag_global_site_tag');
+    $location = get_option('gfwgtag_global_site_tag_location');
+    $selected_pages = get_option('gfwgtag_global_site_tag_pages');  
+	if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+		if (!empty($global_site_tag)) {
+			if ($location === 'Header') {
+				add_action('wp_head', function() use ($global_site_tag) { echo $global_site_tag; }, 0);
+			} elseif ($location === 'Body') {
+				add_action('wp_body_open', function() use ($global_site_tag) { echo $global_site_tag; }, 0);
+			}
+		}
+	}
+}
+
 
 ?>
