@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Built for GTAG tracking but can accomodate anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 1.0.7
+ * Version: 1.1.0
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -360,6 +360,18 @@ add_action('admin_init', 'gtag_tracking_init');
 
 // === Now the output
 
+// Let's have a mean to get the current endpoint for what's coming next
+function get_current_woocommerce_endpoint() {
+    global $wp;
+    // Retrieve the current WooCommerce endpoint from the URL
+    $current_endpoint = WC()->query->get_current_endpoint();
+    // If the current endpoint is not set, check the query string for endpoint parameters
+    if (empty($current_endpoint)) {
+        $current_endpoint = isset($wp->query_vars['endpoint']) ? $wp->query_vars['endpoint'] : '';
+    }
+    return $current_endpoint;
+}
+
 // Conditionally output the scripts
 add_action('template_redirect', 'gtag_tracking_output', 0);
 function gtag_tracking_output() {
@@ -367,7 +379,7 @@ function gtag_tracking_output() {
     $location = get_option('gfwgtag_global_site_tag_location');
     $selected_pages = get_option('gfwgtag_global_site_tag_pages');
 	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
-	if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+	if (in_array('everywhere', $selected_pages) || in_array(get_current_woocommerce_endpoint(), $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
 		if (!empty($global_site_tag)) {
 			if ($location === 'Header') {
 				add_action('wp_head', function() use ($global_site_tag) { echo $global_site_tag; }, 0);
@@ -384,7 +396,7 @@ function gtag_purchase_tracking_output() {
     $location = get_option('gfwgtag_purchase_tracking_code_location');
     $selected_pages = get_option('gfwgtag_purchase_tracking_code_pages');
 	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
-    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+    if (in_array('everywhere', $selected_pages) || in_array(get_current_woocommerce_endpoint(), $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($purchase_tracking_code)) {
             if ($location === 'Header') {
 				add_action('wp_head', function() use ($purchase_tracking_code) { echo $purchase_tracking_code; }, 0);
@@ -401,7 +413,7 @@ function gtag_calls_from_website_output() {
     $location = get_option('gfwgtag_calls_from_website_location');
     $selected_pages = get_option('gfwgtag_calls_from_website_pages');
 	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
-    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+    if (in_array('everywhere', $selected_pages) || in_array(get_current_woocommerce_endpoint(), $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($calls_from_website)) {
             if ($location === 'Header') {
 				add_action('wp_head', function() use ($calls_from_website) { echo $calls_from_website; }, 0);
@@ -418,7 +430,7 @@ function gtag_thank_you_page_conversion_output() {
     $location = get_option('gfwgtag_thank_you_conversion_location');
     $selected_pages = get_option('gfwgtag_thank_you_conversion_pages');
 	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
-    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+    if (in_array('everywhere', $selected_pages) || in_array(get_current_woocommerce_endpoint(), $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($thank_you_conversion)) {
             if ($location === 'Header') {
 				add_action('wp_head', function() use ($thank_you_conversion) { echo $thank_you_conversion; }, 0);
@@ -435,7 +447,7 @@ function gtag_google_tag_manager_output() {
     $location = get_option('gfwgtag_google_tag_manager_location');
     $selected_pages = get_option('gfwgtag_google_tag_manager_pages');
 	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
-    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+    if (in_array('everywhere', $selected_pages) || in_array(get_current_woocommerce_endpoint(), $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($google_tag_manager)) {
             if ($location === 'Header') {
 				add_action('wp_head', function() use ($google_tag_manager) { echo $google_tag_manager; }, 0);
@@ -452,7 +464,7 @@ function gtag_no_script_fallback_output() {
     $location = get_option('gfwgtag_no_script_fallback_location');
     $selected_pages = get_option('gfwgtag_no_script_fallback_pages');
 	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
-    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+    if (in_array('everywhere', $selected_pages) || in_array(get_current_woocommerce_endpoint(), $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($no_script_fallback)) {
             if ($location === 'Header') {
 				add_action('wp_head', function() use ($no_script_fallback) { echo $no_script_fallback; }, 0);
