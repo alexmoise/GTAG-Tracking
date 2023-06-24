@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Built for GTAG tracking but can accomodate anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -132,8 +132,8 @@ function gtag_tracking_field_global_site_tag_callback() {
     
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_global_site_tag" rows="10" >' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_global_site_tag_location">';
-    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
-    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
+    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
+    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body (after tag opening)</option>';
     echo '</select>';
     echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_global_site_tag_pages[]">';
     echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
@@ -151,8 +151,8 @@ function gtag_tracking_field_purchase_tracking_code_callback() {
     
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_purchase_tracking_code" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_purchase_tracking_code_location">';
-    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
-    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
+    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
+    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body (after tag opening)</option>';
     echo '</select>';
     echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_purchase_tracking_code_pages[]">';
     echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
@@ -170,8 +170,8 @@ function gtag_tracking_field_calls_from_website_callback() {
     
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_calls_from_website" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_calls_from_website_location">';
-    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
-    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
+    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
+    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body (after tag opening)</option>';
     echo '</select>';
     echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_calls_from_website_pages[]">';
     echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
@@ -189,8 +189,8 @@ function gtag_tracking_field_thank_you_conversion_callback() {
     
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_thank_you_conversion" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_thank_you_conversion_location">';
-    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
-    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
+    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
+    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body (after tag opening)</option>';
     echo '</select>';
     echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_thank_you_conversion_pages[]">';
     echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
@@ -208,8 +208,8 @@ function gtag_tracking_field_google_tag_manager_callback() {
     
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_google_tag_manager" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_google_tag_manager_location">';
-    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
-    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
+    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
+    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body (after tag opening)</option>';
     echo '</select>';
     echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_google_tag_manager_pages[]">';
     echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
@@ -227,8 +227,8 @@ function gtag_tracking_field_no_script_fallback_callback() {
     
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_no_script_fallback" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_no_script_fallback_location">';
-    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
-    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
+    echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
+    echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body (after tag opening)</option>';
     echo '</select>';
     echo '<div class="input-label">Location:</div><select multiple="multiple" name="gfwgtag_no_script_fallback_pages[]">';
     echo '<option value="everywhere"' . selected(in_array('everywhere', $pages), true, false) . '>Everywhere</option>'; // Add the "everywhere" option
