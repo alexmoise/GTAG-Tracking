@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Best used for GTAG tracking or anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 0.3.1
+ * Version: 0.3.2
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
