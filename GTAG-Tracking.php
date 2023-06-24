@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Built for GTAG tracking but can accomodate anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -46,7 +46,7 @@ function gtag_tracking_render_settings_page() {
     <?php
 }
 
-// Add a bit of CSS for te settings page
+// Add a bit of CSS for the settings page
 add_action('admin_head', 'gtag_tracking_settings_page_css');
 function gtag_tracking_settings_page_css() {
 	$current_screen = get_current_screen();
@@ -127,6 +127,22 @@ function gtag_tracking_register_settings() {
 }
 add_action('admin_init', 'gtag_tracking_register_settings');
 
+// Retrieveing the woocommerce endpoints (we need this so we can add them to the Locations list later
+function get_woocommerce_endpoints_with_titles() {
+    $endpoints = array();
+    $wc_endpoints = WC()->query->get_query_vars();
+    foreach ($wc_endpoints as $key => $value) {
+        $endpoint = wc_get_endpoint_url($key, '', get_permalink(get_option('woocommerce_shop_page_id')));
+        if ($endpoint !== false) {
+            $title = get_the_title(get_option('woocommerce_shop_page_id'));
+            $title = apply_filters('woocommerce_endpoint_' . $key . '_title', $title);
+            $endpoints[$key] = $title;
+        }
+    }
+    return $endpoints;
+}
+
+
 // Field callbacks
 function gtag_tracking_field_global_site_tag_callback() {
     $value = get_option('gfwgtag_global_site_tag');
@@ -144,6 +160,10 @@ function gtag_tracking_field_global_site_tag_callback() {
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
+	$wc_endpoints = get_woocommerce_endpoints_with_titles();
+	foreach ($wc_endpoints as $endpoint => $title) {
+		echo '<option value="' . $endpoint . '" ' . selected(in_array($endpoint, $pages), true, false) . '>' . $title . ' - ' . $endpoint . '</option>';
+	}
     echo '</select>';
 }
 
@@ -163,6 +183,10 @@ function gtag_tracking_field_purchase_tracking_code_callback() {
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
+    $wc_endpoints = get_woocommerce_endpoints_with_titles();
+	foreach ($wc_endpoints as $endpoint => $title) {
+		echo '<option value="' . $endpoint . '" ' . selected(in_array($endpoint, $pages), true, false) . '>' . $title . ' - ' . $endpoint . '</option>';
+	}
     echo '</select>';
 }
 
@@ -182,6 +206,10 @@ function gtag_tracking_field_calls_from_website_callback() {
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
+    $wc_endpoints = get_woocommerce_endpoints_with_titles();
+	foreach ($wc_endpoints as $endpoint => $title) {
+		echo '<option value="' . $endpoint . '" ' . selected(in_array($endpoint, $pages), true, false) . '>' . $title . ' - ' . $endpoint . '</option>';
+	}
     echo '</select>';
 }
 
@@ -201,6 +229,10 @@ function gtag_tracking_field_thank_you_conversion_callback() {
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
+    $wc_endpoints = get_woocommerce_endpoints_with_titles();
+	foreach ($wc_endpoints as $endpoint => $title) {
+		echo '<option value="' . $endpoint . '" ' . selected(in_array($endpoint, $pages), true, false) . '>' . $title . ' - ' . $endpoint . '</option>';
+	}
     echo '</select>';
 }
 
@@ -220,6 +252,10 @@ function gtag_tracking_field_google_tag_manager_callback() {
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
+    $wc_endpoints = get_woocommerce_endpoints_with_titles();
+	foreach ($wc_endpoints as $endpoint => $title) {
+		echo '<option value="' . $endpoint . '" ' . selected(in_array($endpoint, $pages), true, false) . '>' . $title . ' - ' . $endpoint . '</option>';
+	}
     echo '</select>';
 }
 
@@ -239,6 +275,10 @@ function gtag_tracking_field_no_script_fallback_callback() {
     foreach ($pages_list as $page) {
         echo '<option value="' . $page->ID . '" ' . selected(in_array($page->ID, $pages), true, false) . '>' . $page->post_title . '</option>';
     }
+    $wc_endpoints = get_woocommerce_endpoints_with_titles();
+	foreach ($wc_endpoints as $endpoint => $title) {
+		echo '<option value="' . $endpoint . '" ' . selected(in_array($endpoint, $pages), true, false) . '>' . $title . ' - ' . $endpoint . '</option>';
+	}
     echo '</select>';
 }
 
