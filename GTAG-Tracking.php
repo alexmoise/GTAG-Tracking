@@ -44,11 +44,17 @@ function gtag_tracking_settings_page_css() {
     echo '
 	.form-table td * {
     display: block;
-    width: 60%;
+    width: 500px;
 	}
 	.input-label {
     margin: 8px 0 5px 0;
-}
+	}
+	.form-table tr > * {
+    padding: 5px 0 0 0;
+	}
+	.wrap h2 {
+    margin: 10px 0 0 0;
+	}
 	';
     echo '</style>';
 }
