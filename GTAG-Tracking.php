@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Best used for GTAG tracking or anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 0.3.2
+ * Version: 1.0.0
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -53,7 +53,7 @@ function gtag_tracking_settings_page_css() {
     padding: 5px 0 0 0;
 	}
 	.wrap h2 {
-    margin: 10px 0 0 0;
+    margin: 25px 0 0 0;
 	}
 	';
     echo '</style>';
@@ -121,7 +121,7 @@ function gtag_tracking_field_global_site_tag_callback() {
     $location = get_option('gfwgtag_global_site_tag_location');
     $pages = get_option('gfwgtag_global_site_tag_pages');
     
-    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_global_site_tag" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_global_site_tag" rows="10" >' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_global_site_tag_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
@@ -140,7 +140,7 @@ function gtag_tracking_field_purchase_tracking_code_callback() {
     $location = get_option('gfwgtag_purchase_tracking_code_location');
     $pages = get_option('gfwgtag_purchase_tracking_code_pages');
     
-    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_purchase_tracking_code" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_purchase_tracking_code" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_purchase_tracking_code_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
@@ -159,7 +159,7 @@ function gtag_tracking_field_calls_from_website_callback() {
     $location = get_option('gfwgtag_calls_from_website_location');
     $pages = get_option('gfwgtag_calls_from_website_pages');
     
-    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_calls_from_website" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_calls_from_website" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_calls_from_website_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
@@ -178,7 +178,7 @@ function gtag_tracking_field_thank_you_conversion_callback() {
     $location = get_option('gfwgtag_thank_you_conversion_location');
     $pages = get_option('gfwgtag_thank_you_conversion_pages');
     
-    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_thank_you_conversion" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_thank_you_conversion" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_thank_you_conversion_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
@@ -197,7 +197,7 @@ function gtag_tracking_field_google_tag_manager_callback() {
     $location = get_option('gfwgtag_google_tag_manager_location');
     $pages = get_option('gfwgtag_google_tag_manager_pages');
     
-    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_google_tag_manager" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_google_tag_manager" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_google_tag_manager_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
@@ -216,7 +216,7 @@ function gtag_tracking_field_no_script_fallback_callback() {
     $location = get_option('gfwgtag_no_script_fallback_location');
     $pages = get_option('gfwgtag_no_script_fallback_pages');
     
-    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_no_script_fallback" rows="5" cols="50">' . esc_textarea($value) . '</textarea>';
+    echo '<div class="input-label">Code:</div><textarea name="gfwgtag_no_script_fallback" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_no_script_fallback_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header</option>';
     echo '<option value="Body" ' . selected($location, 'Body', false) . '>Body</option>';
@@ -236,7 +236,6 @@ function gtag_tracking_section_global_site_tag_callback() {
     // Section content
 }
 
-// Repeat the above section callbacks for each section
 function gtag_tracking_section_purchase_tracking_code_callback() {
     // Section content
 }
@@ -325,9 +324,9 @@ function gtag_tracking_output() {
 
 add_action('template_redirect', 'gtag_purchase_tracking_output', 0);
 function gtag_purchase_tracking_output() {
-    $purchase_tracking_code = get_option('gfwgtag_purchase_tracking_code'); 
+    $purchase_tracking_code = get_option('gfwgtag_purchase_tracking_code');
     $location = get_option('gfwgtag_purchase_tracking_code_location');
-    $selected_pages = get_option('gfwgtag_purchase_tracking_pages');
+    $selected_pages = get_option('gfwgtag_purchase_tracking_code_pages');
     if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($purchase_tracking_code)) {
             if ($location === 'Header') {
