@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Built for GTAG tracking but can accomodate anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -129,7 +129,7 @@ function gtag_tracking_field_global_site_tag_callback() {
     $value = get_option('gfwgtag_global_site_tag');
     $location = get_option('gfwgtag_global_site_tag_location');
     $pages = get_option('gfwgtag_global_site_tag_pages');
-    
+    $pages = is_array($pages) ? $pages : array();
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_global_site_tag" rows="10" >' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_global_site_tag_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
@@ -148,7 +148,7 @@ function gtag_tracking_field_purchase_tracking_code_callback() {
     $value = get_option('gfwgtag_purchase_tracking_code');
     $location = get_option('gfwgtag_purchase_tracking_code_location');
     $pages = get_option('gfwgtag_purchase_tracking_code_pages');
-    
+    $pages = is_array($pages) ? $pages : array();
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_purchase_tracking_code" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_purchase_tracking_code_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
@@ -167,7 +167,7 @@ function gtag_tracking_field_calls_from_website_callback() {
     $value = get_option('gfwgtag_calls_from_website');
     $location = get_option('gfwgtag_calls_from_website_location');
     $pages = get_option('gfwgtag_calls_from_website_pages');
-    
+    $pages = is_array($pages) ? $pages : array();
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_calls_from_website" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_calls_from_website_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
@@ -186,7 +186,7 @@ function gtag_tracking_field_thank_you_conversion_callback() {
     $value = get_option('gfwgtag_thank_you_conversion');
     $location = get_option('gfwgtag_thank_you_conversion_location');
     $pages = get_option('gfwgtag_thank_you_conversion_pages');
-    
+    $pages = is_array($pages) ? $pages : array();
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_thank_you_conversion" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_thank_you_conversion_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
@@ -205,7 +205,7 @@ function gtag_tracking_field_google_tag_manager_callback() {
     $value = get_option('gfwgtag_google_tag_manager');
     $location = get_option('gfwgtag_google_tag_manager_location');
     $pages = get_option('gfwgtag_google_tag_manager_pages');
-    
+    $pages = is_array($pages) ? $pages : array();
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_google_tag_manager" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_google_tag_manager_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
@@ -224,7 +224,7 @@ function gtag_tracking_field_no_script_fallback_callback() {
     $value = get_option('gfwgtag_no_script_fallback');
     $location = get_option('gfwgtag_no_script_fallback_location');
     $pages = get_option('gfwgtag_no_script_fallback_pages');
-    
+    $pages = is_array($pages) ? $pages : array();
     echo '<div class="input-label">Code:</div><textarea name="gfwgtag_no_script_fallback" rows="10">' . esc_textarea($value) . '</textarea>';
     echo '<div class="input-label">Position:</div><select name="gfwgtag_no_script_fallback_location">';
     echo '<option value="Header" ' . selected($location, 'Header', false) . '>Header (as high as possible)</option>';
@@ -319,7 +319,8 @@ add_action('template_redirect', 'gtag_tracking_output', 0);
 function gtag_tracking_output() {
     $global_site_tag = get_option('gfwgtag_global_site_tag');
     $location = get_option('gfwgtag_global_site_tag_location');
-    $selected_pages = get_option('gfwgtag_global_site_tag_pages');  
+    $selected_pages = get_option('gfwgtag_global_site_tag_pages');
+	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
 	if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
 		if (!empty($global_site_tag)) {
 			if ($location === 'Header') {
@@ -336,6 +337,7 @@ function gtag_purchase_tracking_output() {
     $purchase_tracking_code = get_option('gfwgtag_purchase_tracking_code');
     $location = get_option('gfwgtag_purchase_tracking_code_location');
     $selected_pages = get_option('gfwgtag_purchase_tracking_code_pages');
+	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
     if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($purchase_tracking_code)) {
             if ($location === 'Header') {
@@ -352,6 +354,7 @@ function gtag_calls_from_website_output() {
     $calls_from_website = get_option('gfwgtag_calls_from_website');
     $location = get_option('gfwgtag_calls_from_website_location');
     $selected_pages = get_option('gfwgtag_calls_from_website_pages');
+	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
     if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($calls_from_website)) {
             if ($location === 'Header') {
@@ -368,6 +371,7 @@ function gtag_thank_you_page_conversion_output() {
     $thank_you_conversion = get_option('gfwgtag_thank_you_conversion');
     $location = get_option('gfwgtag_thank_you_conversion_location');
     $selected_pages = get_option('gfwgtag_thank_you_conversion_pages');
+	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
     if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($thank_you_conversion)) {
             if ($location === 'Header') {
@@ -384,6 +388,7 @@ function gtag_google_tag_manager_output() {
     $google_tag_manager = get_option('gfwgtag_google_tag_manager');
     $location = get_option('gfwgtag_google_tag_manager_location');
     $selected_pages = get_option('gfwgtag_google_tag_manager_pages');
+	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
     if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($google_tag_manager)) {
             if ($location === 'Header') {
@@ -400,6 +405,7 @@ function gtag_no_script_fallback_output() {
     $no_script_fallback = get_option('gfwgtag_no_script_fallback');
     $location = get_option('gfwgtag_no_script_fallback_location');
     $selected_pages = get_option('gfwgtag_no_script_fallback_pages');
+	$selected_pages = is_array($selected_pages) ? $selected_pages : array();
     if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
         if (!empty($no_script_fallback)) {
             if ($location === 'Header') {
