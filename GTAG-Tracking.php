@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * GitHub Plugin URI: https://github.com/alexmoise/GTAG-Tracking
  * Description: A custom plugin that allows saving six pieces of tracking code and displaying them in head or after opening the body, conditionally to one, more, or all pages. Best used for GTAG tracking or anything similar (like pixels, validations etc.). Made using chat.openai.com (mostly). For details/troubleshooting please contact me at <a href="https://moise.pro/contact/">https://moise.pro/contact/</a>
- * Version: 0.3.0
+ * Version: 0.3.1
  * Author: Alex Moise
  * Author URI: https://moise.pro
  */
@@ -317,5 +317,84 @@ function gtag_tracking_output() {
 	}
 }
 
+add_action('template_redirect', 'gtag_purchase_tracking_output', 0);
+function gtag_purchase_tracking_output() {
+    $purchase_tracking_code = get_option('gfwgtag_purchase_tracking_code'); 
+    $location = get_option('gfwgtag_purchase_tracking_code_location');
+    $selected_pages = get_option('gfwgtag_purchase_tracking_pages');
+    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+        if (!empty($purchase_tracking_code)) {
+            if ($location === 'Header') {
+				add_action('wp_head', function() use ($purchase_tracking_code) { echo $purchase_tracking_code; }, 0);
+            } elseif ($location === 'Body') {
+                add_action('wp_body_open', function() use ($purchase_tracking_code) { echo $purchase_tracking_code; }, 0);
+            }
+        }
+    }
+}
+
+add_action('template_redirect', 'gtag_calls_from_website_output', 0);
+function gtag_calls_from_website_output() {
+    $calls_from_website = get_option('gfwgtag_calls_from_website');
+    $location = get_option('gfwgtag_calls_from_website_location');
+    $selected_pages = get_option('gfwgtag_calls_from_website_pages');
+    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+        if (!empty($calls_from_website)) {
+            if ($location === 'Header') {
+				add_action('wp_head', function() use ($calls_from_website) { echo $calls_from_website; }, 0);
+            } elseif ($location === 'Body') {
+                add_action('wp_body_open', function() use ($calls_from_website) { echo $calls_from_website; }, 0);
+            }
+        }
+    }
+}
+
+add_action('template_redirect', 'gtag_thank_you_page_conversion_output', 0);
+function gtag_thank_you_page_conversion_output() {
+    $thank_you_conversion = get_option('gfwgtag_thank_you_conversion');
+    $location = get_option('gfwgtag_thank_you_conversion_location');
+    $selected_pages = get_option('gfwgtag_thank_you_conversion_pages');
+    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+        if (!empty($thank_you_conversion)) {
+            if ($location === 'Header') {
+				add_action('wp_head', function() use ($thank_you_conversion) { echo $thank_you_conversion; }, 0);
+            } elseif ($location === 'Body') {
+                add_action('wp_body_open', function() use ($thank_you_conversion) { echo $thank_you_conversion; }, 0);
+            }
+        }
+    }
+}
+
+add_action('template_redirect', 'gtag_google_tag_manager_output', 0);
+function gtag_google_tag_manager_output() {
+    $google_tag_manager = get_option('gfwgtag_google_tag_manager');
+    $location = get_option('gfwgtag_google_tag_manager_location');
+    $selected_pages = get_option('gfwgtag_google_tag_manager_pages');
+    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+        if (!empty($google_tag_manager)) {
+            if ($location === 'Header') {
+				add_action('wp_head', function() use ($google_tag_manager) { echo $google_tag_manager; }, 0);
+            } elseif ($location === 'Body') {
+                add_action('wp_body_open', function() use ($google_tag_manager) { echo $google_tag_manager; }, 0);
+            }
+        }
+    }
+}
+
+add_action('template_redirect', 'gtag_no_script_fallback_output', 0);
+function gtag_no_script_fallback_output() {
+    $no_script_fallback = get_option('gfwgtag_no_script_fallback');
+    $location = get_option('gfwgtag_no_script_fallback_location');
+    $selected_pages = get_option('gfwgtag_no_script_fallback_pages');
+    if (in_array('everywhere', $selected_pages) || in_array(get_queried_object_id(), $selected_pages)) {
+        if (!empty($no_script_fallback)) {
+            if ($location === 'Header') {
+				add_action('wp_head', function() use ($no_script_fallback) { echo $no_script_fallback; }, 0);
+            } elseif ($location === 'Body') {
+                add_action('wp_body_open', function() use ($no_script_fallback) { echo $no_script_fallback; }, 0);
+            }
+        }
+    }
+}
 
 ?>
